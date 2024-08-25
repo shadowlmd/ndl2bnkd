@@ -53,16 +53,18 @@ begin
   Dispose(NodeDefs, Done);
 end;
 
-procedure AddNodeDef(const Address, Domain, INA: String);
+procedure AddNodeDef(const Address, Domain, INA, SysopName, NodeName: String);
 var
   P: PNodeDef;
 begin
   if not InExcludeList(Address) then
   begin
     New(P);
-    P^.Address := NewPString(Address);
-    P^.Domain  := NewPString(Domain);
-    P^.INA     := NewPString(INA);
+    P^.Address   := NewPString(Address);
+    P^.Domain    := NewPString(Domain);
+    P^.INA       := NewPString(INA);
+    P^.SysopName := NewPString(SysopName);
+    P^.NodeName  := NewPString(NodeName);
     NodeDefs^.Insert(P);
   end else
     Inc(ExcludedCount);
@@ -79,9 +81,13 @@ var
     with PNodeDef(P)^ do
     begin
       S := Cfg.Format;
+      StReplaceEx(S, '%newline%', LineEnding);
+      StReplaceEx(S, '%comment%', '#');
       StReplaceEx(S, '%address%', Address^);
       StReplaceEx(S, '%domain%', Domain^);
       StReplaceEx(S, '%hostname%', INA^);
+      StReplaceEx(S, '%sysop%', SysopName^);
+      StReplaceEx(S, '%system%', NodeName^);
       WriteLn(F, S);
     end;
   end;
@@ -349,7 +355,7 @@ end;
 procedure ParseNodeList(const FileMask, Domain: String; Zone: String);
 var
   F: Text;
-  S, FileName, Host, Node, INA: String;
+  S, FileName, Host, Node, INA, SysopName, NodeName: String;
   S1: String[4];
   NormalNode: Boolean;
   Count: Longint;
@@ -412,7 +418,10 @@ begin
     else
       Node := '0';
 
-    AddNodeDef(Zone + ':' + Host + '/' + Node, Domain, INA);
+    NodeName := StReplace(ExtractWord(S, 2, ',', True), '_', ' ');
+    SysopName := StReplace(ExtractWord(S, 4, ',', True), '_', ' ');
+
+    AddNodeDef(Zone + ':' + Host + '/' + Node, Domain, INA, SysopName, NodeName);
     Inc(Count);
   end;
   Close(F);
@@ -423,7 +432,7 @@ end;
 procedure ParsePointList(const FileMask, Domain: String);
 var
   F: Text;
-  S, FileName, Boss, Point, INA: String;
+  S, FileName, Boss, Point, INA, SysopName, NodeName: String;
   S1: String[4];
   Count: Longint;
 begin
@@ -464,7 +473,10 @@ begin
 
     Point := ExtractWord(S, 1, ',', True);
 
-    AddNodeDef(Boss + '.' + Point, Domain, INA);
+    NodeName := StReplace(ExtractWord(S, 2, ',', True), '_', ' ');
+    SysopName := StReplace(ExtractWord(S, 4, ',', True), '_', ' ');
+
+    AddNodeDef(Boss + '.' + Point, Domain, INA, SysopName, NodeName);
     Inc(Count);
   end;
   Close(F);

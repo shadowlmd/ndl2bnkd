@@ -129,6 +129,7 @@ begin
     end;
 
     StUpcaseEx(Key, GetKeyName(S));
+
     if Key = 'NODELIST' then
     begin
       New(NodeList);

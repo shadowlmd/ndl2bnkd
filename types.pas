@@ -39,7 +39,7 @@ type
 
   PNodeDef = ^TNodeDef;
   TNodeDef = record
-    Address, Domain, INA: PString;
+    Address, Domain, INA, SysopName, NodeName: PString;
   end;
 
   PNodeDefCollection = ^TNodeDefCollection;
@@ -110,6 +110,8 @@ begin
       DisposeStr(Address);
       DisposeStr(Domain);
       DisposeStr(INA);
+      DisposeStr(SysopName);
+      DisposeStr(NodeName);
     end;
     Dispose(PNodeList(Item));
   end;
