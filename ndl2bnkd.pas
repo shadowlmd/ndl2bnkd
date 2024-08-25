@@ -29,7 +29,7 @@ var
   S: String;
 
 begin
-  WriteLn('ndl2bnkd 0.8 (C) 2018 Alexey Fayans, 2:5030/1997@fidonet');
+  WriteLn('ndl2bnkd by Alexey Fayans, 2:5030/1997@fidonet');
   WriteLn;
 
   I := 1;

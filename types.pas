@@ -28,7 +28,7 @@ type
   end;
 
   PNodeList = ^TNodeList;
-  TNodeList = packed record
+  TNodeList = record
     Path, Domain, Zone: PString;
   end;
 
@@ -38,7 +38,7 @@ type
   end;
 
   PNodeDef = ^TNodeDef;
-  TNodeDef = packed record
+  TNodeDef = record
     Address, Domain, INA: PString;
   end;
 

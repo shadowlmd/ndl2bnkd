@@ -303,7 +303,7 @@ end;
 }
 
 type
-  TMatchWildcardStack = packed record
+  TMatchWildcardStack = record
     Src, Mask: Byte;
   end;
 
